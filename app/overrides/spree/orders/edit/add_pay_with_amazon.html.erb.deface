@@ -1,0 +1,2 @@
+<!-- insert_bottom "[data-hook='cart_buttons']" -->
+<%= render :partial => "spree/amazon/login" %>

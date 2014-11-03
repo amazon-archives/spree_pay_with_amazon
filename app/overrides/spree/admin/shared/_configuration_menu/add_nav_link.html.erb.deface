@@ -1,0 +1,2 @@
+<!-- insert_bottom 'ul' -->
+<%= configurations_sidebar_menu_item Spree.t(:amazon_settings), edit_admin_amazon_path %>
