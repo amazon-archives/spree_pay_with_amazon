@@ -1,3 +1,3 @@
 Spree::OrdersController.class_eval do
-  ssl_required
+  ssl_required :show, :edit, :update
 end
