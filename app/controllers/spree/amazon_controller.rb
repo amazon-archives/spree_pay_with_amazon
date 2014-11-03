@@ -1,5 +1,5 @@
 class Spree::AmazonController < Spree::StoreController
-
+  ssl_required
   helper 'spree/orders'
   before_filter :load_amazon_mws, except: [:address, :payment]
 
