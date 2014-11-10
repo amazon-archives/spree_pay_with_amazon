@@ -1,7 +1,7 @@
-SpreeAmazonPayments
+spree_pay_with_amazon
 ===================
 
-Introduction goes here.
+Add Pay with Amazon to your Spree Commerce solution.
 
 Installation
 ------------
@@ -9,14 +9,12 @@ Installation
 Add spree_amazon_payments to your Gemfile:
 
 ```
-ruby
 gem 'spree_amazon_payments'
 ```
 
 Bundle your dependencies and run the installation generator:
 
 ```
-shell
 bundle
 bundle exec rails g spree_amazon_payments:install
 ```
