@@ -60,7 +60,6 @@ module Spree
     end
 
     def credit(amount, _credit_card, gateway_options={})
-      binding.pry
       order = Spree::Order.find_by(:number => gateway_options[:order_id].split("-")[0])
       load_amazon_mws(order.amazon_order_reference_id)
       capture_id = order.amazon_transaction.capture_id
