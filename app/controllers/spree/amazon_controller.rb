@@ -117,8 +117,8 @@ class Spree::AmazonController < Spree::StoreController
   end
 
   def load_amazon_mws
-    redirect_to root_path, :notice => "No Order Found" if current_order.amazon_transaction.order_reference.nil?
-    @mws ||= AmazonMws.new(current_order.amazon_transaction.order_reference)
+    redirect_to root_path, :notice => "No Order Found" if current_order.amazon_order_reference_id.nil?
+    @mws ||= AmazonMws.new(current_order.amazon_order_reference_id)
   end
 
   private

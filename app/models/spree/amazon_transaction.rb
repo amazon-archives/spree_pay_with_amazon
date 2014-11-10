@@ -22,6 +22,14 @@ module Spree
       "a"
     end
 
+    def reusable_sources(_order)
+      []
+    end
+
+    def self.with_payment_profile
+      []
+    end
+
     def can_capture?(payment)
       (payment.pending? || payment.checkout?) && payment.amount > 0
     end

@@ -6,6 +6,6 @@ Spree::Order.class_eval do
   end
 
   def amazon_order_reference_id
-    amazon_transaction.order_reference
+    amazon_transaction.try(:order_reference)
   end
 end

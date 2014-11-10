@@ -1,5 +1,5 @@
 <fieldset data-id='amazon' class="no-border-bottom">
- <%= hidden_field_tag "card", "1" %>
+ <%= hidden_field_tag "card", @order.amazon_transaction.try(:id) %>
  </fieldset>
 
  Billing existing Amazon Card

@@ -15,6 +15,10 @@ module Spree
       AmazonTransaction
     end
 
+    def payment_source_class
+      AmazonTransaction
+    end
+
     def source_required?
       true
     end
@@ -45,9 +49,9 @@ module Spree
       authorization_id = order.amazon_transaction.authorization_id
       response = @mws.capture(authorization_id, "C#{Time.now.to_i}", amount / 100.00, Spree::Config.currency)
       t = order.amazon_transaction
-      t.capture_id = response["CaptureResponse"]["CaptureResult"]["CaptureDetails"]["AmazonCaptureId"]
-      t.save
-      return ActiveMerchant::Billing::Response.new(response["CaptureResponse"]["CaptureResult"]["CaptureDetails"]["CaptureStatus"]["State"] == "Completed", "Success", response)
+      t.capture_id = response.fetch("CaptureResponse", {}).fetch("CaptureResult", {}).fetch("CaptureDetails", {}).fetch("AmazonCaptureId", nil)
+      t.save!
+      return ActiveMerchant::Billing::Response.new(response.fetch("CaptureResponse", {}).fetch("CaptureResult", {}).fetch("CaptureDetails", {}).fetch("CaptureStatus", {})["State"] == "Completed", "OK", response)
     end
 
     def purchase(amount, amazon_checkout, gateway_options={})
@@ -55,17 +59,18 @@ module Spree
       capture(amount, amazon_checkout, gateway_options)
     end
 
-    def credit(amount, _credit_card, _response_code, gateway_options={})
-      load_amazon_mws(gateway_options[:order_id].split("-")[1,3].join("-"))
+    def credit(amount, _credit_card, gateway_options={})
+      binding.pry
       order = Spree::Order.find_by(:number => gateway_options[:order_id].split("-")[0])
+      load_amazon_mws(order.amazon_order_reference_id)
       capture_id = order.amazon_transaction.capture_id
       response = @mws.refund(capture_id, gateway_options[:order_id], amount / 100.00, Spree::Config.currency)
       return ActiveMerchant::Billing::Response.new(true, "Success", response)
     end
 
     def void(response_code, gateway_options)
-      load_amazon_mws(gateway_options[:order_id].split("-")[1,3].join("-"))
       order = Spree::Order.find_by(:number => gateway_options[:order_id].split("-")[0])
+      load_amazon_mws(order.amazon_order_reference_id)
       capture_id = order.amazon_transaction.capture_id
       response = @mws.refund(capture_id, gateway_options[:order_id], order.total, Spree::Config.currency)
       return ActiveMerchant::Billing::Response.new(true, "Success", response)
