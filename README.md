@@ -1,7 +1,7 @@
 SpreeAmazonPayments
 ===================
 
-Introduction goes here.
+Add Pay with Amazon to your Spree Commerce solution.
 
 Installation
 ------------
