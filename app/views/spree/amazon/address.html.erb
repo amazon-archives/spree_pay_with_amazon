@@ -1,11 +1,36 @@
-<script type='text/javascript'>
-  window.onAmazonLoginReady = function() {
-    amazon.Login.setClientId('<%= Spree::Config[:amazon_client_id] %>');
-  };
-</script>
-<script type='text/javascript'
-  src='https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js?sellerId=<%= Spree::Config[:amazon_merchant_id] %>'>
-</script>
+<% content_for :head do %>
+  <meta name="viewport" content="width-device-width, initial-scale=1.0, maximum-scale=1.0"/>
+
+  <script type='text/javascript'>
+    window.onAmazonLoginReady = function() {
+      amazon.Login.setClientId('<%= Spree::Config[:amazon_client_id] %>');
+    };
+  </script>
+  <script type='text/javascript'
+    src='https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js?sellerId=<%= Spree::Config[:amazon_merchant_id] %>'>
+  </script>
+
+  <script>
+    $( document ).ready(function() {
+      new OffAmazonPayments.Widgets.AddressBook({
+        sellerId: '<%= Spree::Config[:amazon_merchant_id] %>',
+        agreementType: 'orderreference',
+        onOrderReferenceCreate: function(orderReference) {
+          order_reference = orderReference.getAmazonOrderReferenceId();
+        },
+        onAddressSelect: function(orderReference) {
+          <%= render 'spree/amazon/payment' %>
+        },
+        design: {
+          designMode: 'responsive'
+        },
+        onError: function(error) {
+         console.log(error.getErrorMessage());
+        }
+      }).bind("addressBookWidgetDiv");
+    });
+  </script>
+<% end %>
 
 <div id="addressBookWidgetDiv">
 </div>
@@ -13,24 +38,6 @@
 <div id="walletWidgetDiv">
 </div>
 
-<script>
-new OffAmazonPayments.Widgets.AddressBook({
-  sellerId: '<%= Spree::Config[:amazon_merchant_id] %>',
-  agreementType: 'orderreference',
-  onOrderReferenceCreate: function(orderReference) {
-    order_reference = orderReference.getAmazonOrderReferenceId();
-  },
-  onAddressSelect: function(orderReference) {
-    <%= render 'spree/amazon/payment' %>
-  },
-  design: {
-     size : {width:'400px', height:'260px'}
-  },
-  onError: function(error) {
-   // your error handling code
-  }
-}).bind("addressBookWidgetDiv");
-</script>
-  <div class="form-buttons" data-hook="buttons">
+  <div class="form-buttons" data-hook="buttons" id="submit_form" style="display: none;">
     <%= link_to Spree.t(:save_and_continue), "/amazon_order/delivery", :class => 'continue button primary' %>
   </div>

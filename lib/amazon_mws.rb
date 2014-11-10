@@ -109,12 +109,20 @@ class AmazonMws
       })
   end
 
+  def close(ref_number)
+    process({
+      "Action" => "CloseAuthorization",
+      "AmazonAuthorizationId" => ref_number
+      })
+  end
+
   private
 
   def default_hash
     {
       "AWSAccessKeyId"=>Spree::Config[:amazon_aws_access_key_id],
       "SellerId"=>Spree::Config[:amazon_merchant_id],
+      "PlatformId"=>"Spree",
       "SignatureMethod"=>"HmacSHA256",
       "SignatureVersion"=>"2",
       "Timestamp"=>Time.now.utc.iso8601,

@@ -1,11 +1,11 @@
 new OffAmazonPayments.Widgets.Wallet({
   sellerId: '<%= Spree::Config[:amazon_merchant_id] %>',
   onPaymentSelect: function(orderReference) {
-  console.log(orderReference);
     jQuery.post('/amazon_order/payment', {"order_reference": order_reference});
+    $('#submit_form').show();
   },
   design: {
-     size : {width:'400px', height:'260px'}
+    designMode: 'responsive'
   },
   onError: function(error) {
     // your error handling code

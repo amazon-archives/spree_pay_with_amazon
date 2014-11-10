@@ -4,7 +4,7 @@
   <%= render :partial => 'spree/amazon/order_details', :locals => { :order => @order } %>
 </fieldset>
 
-<%= form_tag complete_amazon_order_path do %>
+<%= form_tag amazon_order_complete_path(@order), :class => 'edit_order' do %>
   <div class="form-buttons" data-hook="buttons">
     <%= submit_tag Spree.t(:place_order), :class => 'continue button primary' %>
     <script>Spree.disableSaveOnClick();</script>

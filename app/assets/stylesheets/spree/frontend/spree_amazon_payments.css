@@ -1,4 +1,18 @@
-/*
-Placeholder manifest file.
-the installer will append this file to the app vendored assets here: 'vendor/assets/stylesheets/spree/frontend/all.css'
-*/
+/* Please include the min-width, max-width, min-height and max-height  */
+/* if you plan to use a relative CSS unit measurement to make sure the  */
+/* widget renders in the optimal size allowed.              */
+
+#addressBookWidgetDiv {min-width: 300px; max-width: 600px; min-height:
+228px; max-height: 400px; width: auto;}
+#walletWidgetDiv {min-width: 300px; max-width:600px; min-height: 228px;
+max-height: 400px; width: auto;}
+
+/* Smartphone and small window */
+#addressBookWidgetDiv {width: 100%; height: 228px; width: auto;}
+#walletWidgetDiv {width: 100%; height: 228px; width: auto;}
+
+/* Desktop and tablet */
+@media only screen and (min-width: 768px) {
+    #addressBookWidgetDiv {width: 400px; height: 228px; width: auto;}
+    #walletWidgetDiv {width: 400px; height: 228px; width: auto;}
+}

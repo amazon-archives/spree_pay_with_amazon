@@ -5,8 +5,11 @@ Spree::Core::Engine.routes.draw do
       post 'payment'
       get 'delivery'
       post 'confirm'
-      post 'complete'
     end
+  end
+
+  resources :amazon_order, only: [], controller: "amazon" do
+    post 'complete'
   end
 
   post '/amazon_callback', to: 'amazon_callback#new'

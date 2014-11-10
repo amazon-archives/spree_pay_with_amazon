@@ -2,20 +2,20 @@ class Spree::AmazonController < Spree::StoreController
   ssl_required
   helper 'spree/orders'
   before_filter :check_for_current_order
-  before_filter :load_amazon_mws, except: [:address, :payment]
+  before_filter :load_amazon_mws, except: [:address, :payment, :complete]
 
   respond_to :json
 
   def address
     current_order.state = 'cart'
-    current_order.save
+    current_order.save!
   end
 
   def payment
-    payment = current_order.payments.first{|p| p.state == "checkout" && p.identifier == params[:order_reference]} || current_order.payments.create
+    payment = current_order.payments.valid.first{|p| p.source_type == "Spree::AmazonTransaction"} || current_order.payments.create
     payment.identifier = params[:order_reference]
     payment.payment_method = Spree::PaymentMethod.find_by(:type => "Spree::Gateway::Amazon")
-    payment.source = Spree::AmazonTransaction.create(:order_reference => params[:order_reference])
+    payment.source ||= Spree::AmazonTransaction.create(:order_reference => params[:order_reference], :order_id => current_order.id)
 
     payment.save!
 
@@ -65,13 +65,13 @@ class Spree::AmazonController < Spree::StoreController
         current_order.save!
         address = data.destination["PhysicalDestination"]
         first_name = address["Name"].split(" ")[0] rescue "Amazon"
-        last_name = address["Name"].split(" ")[-1] rescue "User"
+        last_name = address["Name"].split(" ")[1..10].join(" ")
         spree_address = current_order.ship_address
         spree_address.update({
                                 "firstname" => first_name,
                                 "lastname" => last_name,
                                 "address1" => address["AddressLine1"],
-                                "phone" => address["Phone"],
+                                "phone" => address["Phone"] || "n/a",
                                 "city" => address["City"],
                                 "zipcode" => address["PostalCode"],
                                 "state_name" => address["StateOrRegion"],
@@ -82,7 +82,7 @@ class Spree::AmazonController < Spree::StoreController
       end
       current_order.create_tax_charge!
       current_order.reload
-      payment = current_order.payments.with_state('checkout').first{|p| p.identifier == params[:order_reference]}
+      payment = current_order.payments.valid.first{|p| p.source_type == "Spree::AmazonTransaction"}
       payment.amount = current_order.total
       payment.save!
       @order = current_order
@@ -93,24 +93,32 @@ class Spree::AmazonController < Spree::StoreController
   end
 
   def complete
-    redirect_to root_path if current_order.nil?
-    @order = current_order
-    while(current_order.next) do
+    @order = Spree::Order.find_by(:number => params[:amazon_order_id])
+    authorize!(:edit, @order, cookies.signed[:guest_token])
+
+    redirect_to root_path if @order.nil?
+    while(@order.next) do
 
     end
 
-    if current_order.completed?
+    if @order.completed?
       @current_order = nil
       flash.notice = Spree.t(:order_processed_successfully)
+    end
+
+    if @order.complete?
+      redirect_to spree.order_path(@order)
     else
-      redirect_to cart_path
+      @order.state = 'cart'
+      @order.amazon_transactions.destroy_all
+      redirect_to cart_path, :notice => "Unable to process order"
       return true
     end
   end
 
   def load_amazon_mws
-    redirect_to root_path, :notice => "No Order Found" if current_order.payments.last.try(:identifier).nil?
-    @mws ||= AmazonMws.new(current_order.payments.last.try(:identifier))
+    redirect_to root_path, :notice => "No Order Found" if current_order.amazon_transaction.order_reference.nil?
+    @mws ||= AmazonMws.new(current_order.amazon_transaction.order_reference)
   end
 
   private
