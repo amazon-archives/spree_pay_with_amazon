@@ -87,7 +87,7 @@ module Spree
     private
 
     def load_amazon_mws(reference)
-      @mws ||= AmazonMws.new(reference)
+      @mws ||= AmazonMws.new(reference, self.preferred_test_mode)
     end
   end
 end
