@@ -7,7 +7,7 @@
     };
   </script>
   <script type='text/javascript'
-    src='https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js?sellerId=<%= Spree::Config[:amazon_merchant_id] %>'>
+    src='https://static-na.payments-amazon.com/OffAmazonPayments/us/<%= Spree::Gateway::Amazon.first.preferred_test_mode ? 'sandbox/' : '' %>js/Widgets.js?sellerId=<%= Spree::Config[:amazon_merchant_id] %>'>
   </script>
 
   <script>

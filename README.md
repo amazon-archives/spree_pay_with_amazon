@@ -9,7 +9,7 @@ Installation
 Add spree_amazon_payments to your Gemfile:
 
 ```
-gem 'spree_amazon_payments'
+gem 'spree_amazon_payments', github: 'amzn/spree_pay_with_amazon'
 ```
 
 Bundle your dependencies and run the installation generator:
