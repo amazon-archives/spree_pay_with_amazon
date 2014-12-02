@@ -19,9 +19,9 @@ bundle
 bundle exec rails g spree_amazon_payments:install
 ```
 
-Configuration
+Registration
 --------------
-https://developer.amazonservices.com/gp/mws/faq.html#mwsCredentials
+https://payments.amazon.com/signup @TODO change this to the branded reg link when the account is updated
 
 Refund Callback
 --------------
