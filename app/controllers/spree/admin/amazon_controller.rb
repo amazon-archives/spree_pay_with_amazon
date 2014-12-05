@@ -6,7 +6,6 @@ class Spree::Admin::AmazonController < Spree::Admin::BaseController
   end
 
   def update
-    Spree::Config[:amazon_marketplace_id] = params[:amazon_marketplace_id]
     Spree::Config[:amazon_client_id]=params[:amazon_client_id]
     Spree::Config[:amazon_merchant_id] = params[:amazon_merchant_id]
     Spree::Config[:amazon_aws_access_key_id] = params[:amazon_aws_access_key_id]
