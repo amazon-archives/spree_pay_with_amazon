@@ -21,8 +21,10 @@ bundle exec rails g spree_amazon_payments:install
 
 Registration
 --------------
-https://payments.amazon.com/signup @TODO change this to the branded reg link when the account is updated
+[Register for your Amazon Payments account here](https://sellercentral.amazon.com/hz/me/sp/signup?solutionProviderOptions=lwa%3Bmws-acc%3B&marketplaceId=AGWSWK15IEJJ7&solutionProviderToken=AAAAAQAAAAEAAAAQw%2B2XzpFj2GWN0gTo0twkdAAAAHAcjkEL%2FdK5mKZbaJyrLpiWRmzHCLnC5eLDc8TlCy4aHUaagtgrQcxbsBRi5Y3xsRv1jXEP2QFuCAniHYcBxE%2FpbFnuBaEBPHBANejgd8xYL4fBX8Fz3I9%2Fl5bmIYBWyvSCEP8MPJQ6KKCNwPGcV%2FDN&solutionProviderId=A31NP5KFHXSFV1)
 
 Refund Callback
 --------------
-You will need to configure Instant Notification Settings in order to accept the callback when a refund is completed. At https://sellercentral.amazon.com/gp/pyop/seller/account/settings/user-settings-view.html? you will set the Merchant URL to https://YOUR_STORE_URL/amazon_callback
+You will need to configure Instant Notification Settings in order to accept the callback when a refund is completed. Configure your IPN settings by logging into your [Seller Central Account](https://sellercentral.amazon.com/gp/pyop/seller/account/settings/user-settings-view.html?).
+
+You will need to set the Merchant URL to https://YOUR_STORE_URL/amazon_callback
