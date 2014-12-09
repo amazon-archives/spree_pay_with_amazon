@@ -123,7 +123,7 @@ class AmazonMws
     {
       "AWSAccessKeyId"=>Spree::Config[:amazon_aws_access_key_id],
       "SellerId"=>Spree::Config[:amazon_merchant_id],
-      "PlatformId"=>"AQS4H9SW4KNO1",
+      "PlatformId"=>"A31NP5KFHXSFV1",
       "SignatureMethod"=>"HmacSHA256",
       "SignatureVersion"=>"2",
       "Timestamp"=>Time.now.utc.iso8601,
