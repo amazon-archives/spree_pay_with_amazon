@@ -2,7 +2,7 @@ class Spree::Admin::AmazonController < Spree::Admin::BaseController
   respond_to :html
 
   def edit
-
+    @amazon_callback_url = "#{root_url}amazon_callback"
   end
 
   def update

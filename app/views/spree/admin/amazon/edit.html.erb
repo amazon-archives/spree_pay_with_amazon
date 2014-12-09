@@ -25,6 +25,10 @@
         <br />
         <%= text_field_tag :amazon_aws_secret_access_key, Spree::Config[:amazon_aws_secret_access_key], class: 'fullwidth' %>
 
+        <%= label_tag "Amazon Callback Url" %>
+        <br />
+        <%= text_field_tag :amazon_callback_url, @amazon_callback_url, class: 'fullwidth', disabled: true %>
+
         <div class="form-buttons filter-actions actions" data-hook="buttons">
           <%= button Spree.t('actions.update'), 'refresh' %>
           <span class="or"><%= Spree.t(:or) %></span>
