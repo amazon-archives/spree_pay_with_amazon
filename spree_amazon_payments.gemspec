@@ -7,12 +7,8 @@ Gem::Specification.new do |s|
   s.description = ''
   s.required_ruby_version = '>= 1.9.3'
 
-  s.author    = 'You'
-  # s.email     = 'you@example.com'
-  # s.homepage  = 'http://www.spreecommerce.com'
+  s.author    = 'Amazon Payments'
 
-  #s.files       = `git ls-files`.split("\n")
-  #s.test_files  = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.require_path = 'lib'
   s.requirements << 'none'
 
