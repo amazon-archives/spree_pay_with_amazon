@@ -7,16 +7,12 @@ Gem::Specification.new do |s|
   s.description = ''
   s.required_ruby_version = '>= 1.9.3'
 
-  s.author    = 'You'
-  # s.email     = 'you@example.com'
-  # s.homepage  = 'http://www.spreecommerce.com'
+  s.author    = 'Amazon Payments'
 
-  #s.files       = `git ls-files`.split("\n")
-  #s.test_files  = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.require_path = 'lib'
   s.requirements << 'none'
 
-  s.add_dependency 'spree_core', '~> 2.3.4'
+  s.add_dependency 'spree_core', '~> 2.2.0'
 
   s.add_development_dependency 'capybara', '~> 2.4'
   s.add_development_dependency 'coffee-rails'
