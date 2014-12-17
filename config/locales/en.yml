@@ -1,3 +1,12 @@
+##
+# Amazon Payments - Login and Pay for Spree Commerce
+#
+# @category    Amazon
+# @package     Amazon_Payments
+# @copyright   Copyright (c) 2014 Amazon.com
+# @license     http://opensource.org/licenses/Apache-2.0  Apache License, Version 2.0
+#
+##
 # Sample localization file for English. Add more files in this directory for other locales.
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
