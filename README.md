@@ -31,4 +31,4 @@ The IPN URL will be in the Configuration section of your Spree Commerce instance
 
 User Guide
 --------------
-Please see the user guide [here](https://github.com/amzn/spree_pay_with_amazon/blob/master/LoginandPaywithAmazonforSpreeCommerce.pdf) for more information
+Please see the user guide [here](https://github.com/amzn/spree_pay_with_amazon/blob/master/LoginandPaywithAmazonforSpreeCommerce.pdf?raw=true) for more information
