@@ -28,3 +28,7 @@ Refund Callback
 You will need to configure Instant Notification Settings in order to accept the callback when a refund is completed. Configure your IPN settings by logging into your [Seller Central Account](https://sellercentral.amazon.com/gp/pyop/seller/account/settings/user-settings-view.html?).
 
 The IPN URL will be in the Configuration section of your Spree Commerce instance.
+
+User Guide
+--------------
+Please see the user guide [here](https://github.com/amzn/spree_pay_with_amazon/blob/master/LoginandPaywithAmazonforSpreeCommerce.pdf) for more information
