@@ -19,10 +19,11 @@ Spree::Core::Engine.routes.draw do
 
   resources :amazon_order, only: [], controller: "amazon" do
     post 'complete'
+    get 'complete'
   end
 
-  post '/amazon_callback', to: 'amazon_callback#new'
-  get '/amazon_callback', to: 'amazon_callback#new'
+  post 'amazon_callback', to: 'amazon_callback#new'
+  get 'amazon_callback', to: 'amazon_callback#new'
 
   namespace :admin do
     resource :amazon, only: [:edit, :update], controller: "amazon"
