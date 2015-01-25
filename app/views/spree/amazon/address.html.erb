@@ -12,6 +12,7 @@
   <script type='text/javascript'>
     window.onAmazonLoginReady = function() {
       amazon.Login.setClientId('<%= Spree::Config[:amazon_client_id] %>');
+      $('#continue_to_delivery').click();
     };
   </script>
   <script type='text/javascript'
@@ -36,6 +37,15 @@
          console.log(error.getErrorMessage());
         }
       }).bind("addressBookWidgetDiv");
+      $('#continue_to_delivery').click();
+      $('#continue_to_delivery').click(function () {
+        $("#deliveryOptionDiv").html('Loading...');
+      });
+      $('#continue_to_delivery').on('ajax:success', function(evt, data, status, xhr){
+        $("#deliveryOptionDiv").html(data);
+      }).bind("ajax:error", function(evt, data, status, xhr){
+        $("div#errors p").text(data);
+      });
     });
   </script>
 <% end %>
@@ -46,6 +56,11 @@
 <div id="walletWidgetDiv">
 </div>
 
+
   <div class="form-buttons" data-hook="buttons" id="submit_form" style="display: none;">
-    <%= link_to Spree.t(:save_and_continue), "/amazon_order/delivery", :class => 'continue button primary' %>
+    <%= link_to Spree.t(:save_and_continue), "/amazon_order/delivery", :class => 'continue button primary', :id => 'continue_to_delivery', :remote => true %>
   </div>
+
+<div id="deliveryOptionDiv">
+  Loading...
+</div>
