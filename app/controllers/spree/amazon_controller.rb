@@ -63,7 +63,7 @@ class Spree::AmazonController < Spree::StoreController
 
   def confirm
 
-    if current_order.update_from_params(params, permitted_checkout_attributes, request.headers.env)
+    if current_order.update_from_params(params, permitted_checkout_attributes)
 
       @mws.set_order_data(current_order.total, current_order.currency)
 
