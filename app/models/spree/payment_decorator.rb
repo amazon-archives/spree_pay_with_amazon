@@ -42,11 +42,12 @@ Spree::Payment.class_eval do
     end
 
     after_transition do |payment, transition|
-      payment.state_changes.create!(
-        previous_state: transition.from,
-        next_state:     transition.to,
-        name:           'payment',
-      )
+      # Not necessary for 2-1-stable.
+      #payment.state_changes.create!(
+      #  previous_state: transition.from,
+      #  next_state:     transition.to,
+      #  name:           'payment',
+      #)
     end
   end
 end

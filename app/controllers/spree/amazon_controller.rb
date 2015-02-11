@@ -63,7 +63,7 @@ class Spree::AmazonController < Spree::StoreController
 
   def confirm
 
-    if current_order.update_from_params(params, permitted_checkout_attributes, request.headers.env)
+    if current_order.update_attributes(object_params)
 
       @mws.set_order_data(current_order.total, current_order.currency)
 
@@ -136,7 +136,31 @@ class Spree::AmazonController < Spree::StoreController
   end
 
   private
+  # For payment step, filter order parameters to produce the expected nested
+  # attributes for a single payment and its source, discarding attributes
+  # for payment methods other than the one selected
+  def object_params
+    # has_checkout_step? check is necessary due to issue described in #2910
+    if current_order.has_checkout_step?("payment") && current_order.payment?
+      if params[:payment_source].present?
+        source_params = params.delete(:payment_source)[params[:order][:payments_attributes].first[:payment_method_id].underscore]
 
+        if source_params
+          params[:order][:payments_attributes].first[:source_attributes] = source_params
+        end
+      end
+
+      if (params[:order][:payments_attributes])
+        params[:order][:payments_attributes].first[:amount] = current_order.total
+      end
+    end
+
+    if params[:order]
+      params[:order].permit(permitted_checkout_attributes)
+    else
+      {}
+    end
+  end
 
   def check_for_current_order
     redirect_to root_path, :notice => "No Order Found" if current_order.nil?
