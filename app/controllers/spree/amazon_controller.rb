@@ -33,6 +33,8 @@ class Spree::AmazonController < Spree::StoreController
 
   def delivery
     data = @mws.fetch_order_data
+    current_order.state = 'cart'
+
     if data.destination && data.destination["PhysicalDestination"]
       current_order.email = "pending@amazon.com"
       address = data.destination["PhysicalDestination"]
@@ -56,7 +58,7 @@ class Spree::AmazonController < Spree::StoreController
     else
       redirect_to address_amazon_order_path, :notice => "Unable to load Address data from Amazon"
     end
-
+    render :layout => false
   end
 
   def confirm
@@ -95,6 +97,9 @@ class Spree::AmazonController < Spree::StoreController
       payment.amount = current_order.total
       payment.save!
       @order = current_order
+
+      # Remove the following line to enable the confirmation step.
+      redirect_to amazon_order_complete_path(@order)
     else
       render :edit
     end
@@ -126,7 +131,7 @@ class Spree::AmazonController < Spree::StoreController
   end
 
   def load_amazon_mws
-    redirect_to root_path, :notice => "No Order Found" if current_order.amazon_order_reference_id.nil?
+    render :nothing => true, :status => 200 if current_order.amazon_order_reference_id.nil?
     @mws ||= AmazonMws.new(current_order.amazon_order_reference_id, Spree::Gateway::Amazon.first.preferred_test_mode)
   end
 
