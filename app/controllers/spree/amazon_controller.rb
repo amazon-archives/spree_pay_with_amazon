@@ -33,6 +33,8 @@ class Spree::AmazonController < Spree::StoreController
 
   def delivery
     data = @mws.fetch_order_data
+    current_order.state = 'cart'
+
     if data.destination && data.destination["PhysicalDestination"]
       current_order.email = "pending@amazon.com"
       address = data.destination["PhysicalDestination"]
@@ -56,12 +58,12 @@ class Spree::AmazonController < Spree::StoreController
     else
       redirect_to address_amazon_order_path, :notice => "Unable to load Address data from Amazon"
     end
-
+    render :layout => false
   end
 
   def confirm
 
-    if current_order.update_from_params(params, permitted_checkout_attributes, request.headers.env)
+    if current_order.update_attributes(object_params)
 
       @mws.set_order_data(current_order.total, current_order.currency)
 
@@ -95,6 +97,9 @@ class Spree::AmazonController < Spree::StoreController
       payment.amount = current_order.total
       payment.save!
       @order = current_order
+
+      # Remove the following line to enable the confirmation step.
+      redirect_to amazon_order_complete_path(@order)
     else
       render :edit
     end
@@ -126,12 +131,36 @@ class Spree::AmazonController < Spree::StoreController
   end
 
   def load_amazon_mws
-    redirect_to root_path, :notice => "No Order Found" if current_order.amazon_order_reference_id.nil?
+    render :nothing => true, :status => 200 if current_order.amazon_order_reference_id.nil?
     @mws ||= AmazonMws.new(current_order.amazon_order_reference_id, Spree::Gateway::Amazon.first.preferred_test_mode)
   end
 
   private
+  # For payment step, filter order parameters to produce the expected nested
+  # attributes for a single payment and its source, discarding attributes
+  # for payment methods other than the one selected
+  def object_params
+    # has_checkout_step? check is necessary due to issue described in #2910
+    if current_order.has_checkout_step?("payment") && current_order.payment?
+      if params[:payment_source].present?
+        source_params = params.delete(:payment_source)[params[:order][:payments_attributes].first[:payment_method_id].underscore]
 
+        if source_params
+          params[:order][:payments_attributes].first[:source_attributes] = source_params
+        end
+      end
+
+      if (params[:order][:payments_attributes])
+        params[:order][:payments_attributes].first[:amount] = current_order.total
+      end
+    end
+
+    if params[:order]
+      params[:order].permit(permitted_checkout_attributes)
+    else
+      {}
+    end
+  end
 
   def check_for_current_order
     redirect_to root_path, :notice => "No Order Found" if current_order.nil?
