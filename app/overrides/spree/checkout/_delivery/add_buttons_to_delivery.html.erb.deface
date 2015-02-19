@@ -1,0 +1,4 @@
+<!-- replace '[data-hook="buttons"]' -->
+<div class="form-buttons" data-hook="buttons">
+  <%= submit_tag Spree.t(:place_order), :class => 'continue button primary' %>
+</div>

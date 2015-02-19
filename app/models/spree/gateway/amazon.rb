@@ -36,7 +36,7 @@ module Spree
       if amount < 0
         return ActiveMerchant::Billing::Response.new(true, "Success", {})
       end
-      order = Spree::Order.find_by(:number => gateway_options[:order_id].split("-")[0])
+      order = Spree::Order.find_by_number(gateway_options[:order_id].split("-")[0])
       load_amazon_mws(order.amazon_order_reference_id)
       response = @mws.authorize(gateway_options[:order_id], amount / 100.0, Spree::Config.currency)
       if response["ErrorResponse"]
@@ -52,7 +52,7 @@ module Spree
       if amount < 0
         return credit(amount.abs, nil, nil, gateway_options)
       end
-      order = Spree::Order.find_by(:number => gateway_options[:order_id].split("-")[0])
+      order = Spree::Order.find_by_number(gateway_options[:order_id].split("-")[0])
       load_amazon_mws(order.amazon_order_reference_id)
 
       authorization_id = order.amazon_transaction.authorization_id
@@ -69,7 +69,7 @@ module Spree
     end
 
     def credit(amount, _credit_card, gateway_options={})
-      order = Spree::Order.find_by(:number => gateway_options[:order_id].split("-")[0])
+      order = Spree::Order.find_by_number(gateway_options[:order_id].split("-")[0])
       load_amazon_mws(order.amazon_order_reference_id)
       capture_id = order.amazon_transaction.capture_id
       response = @mws.refund(capture_id, gateway_options[:order_id], amount / 100.00, Spree::Config.currency)
@@ -77,7 +77,7 @@ module Spree
     end
 
     def void(response_code, gateway_options)
-      order = Spree::Order.find_by(:number => gateway_options[:order_id].split("-")[0])
+      order = Spree::Order.find_by_number(gateway_options[:order_id].split("-")[0])
       load_amazon_mws(order.amazon_order_reference_id)
       capture_id = order.amazon_transaction.capture_id
       response = @mws.refund(capture_id, gateway_options[:order_id], order.total, Spree::Config.currency)
@@ -85,7 +85,7 @@ module Spree
     end
 
     def close(amount, amazon_checkout, gateway_options={})
-      order = Spree::Order.find_by(:number => gateway_options[:order_id].split("-")[0])
+      order = Spree::Order.find_by_number(gateway_options[:order_id].split("-")[0])
       load_amazon_mws(order.amazon_order_reference_id)
 
       authorization_id = order.amazon_transaction.authorization_id

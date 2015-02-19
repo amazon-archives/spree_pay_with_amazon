@@ -23,7 +23,7 @@ class Spree::AmazonController < Spree::StoreController
   def payment
     payment = current_order.payments.valid.first{|p| p.source_type == "Spree::AmazonTransaction"} || current_order.payments.create
     payment.identifier = params[:order_reference]
-    payment.payment_method = Spree::PaymentMethod.find_by(:type => "Spree::Gateway::Amazon")
+    payment.payment_method = Spree::PaymentMethod.find_by_type("Spree::Gateway::Amazon")
     payment.source ||= Spree::AmazonTransaction.create(:order_reference => params[:order_reference], :order_id => current_order.id)
 
     payment.save!
@@ -33,6 +33,8 @@ class Spree::AmazonController < Spree::StoreController
 
   def delivery
     data = @mws.fetch_order_data
+    current_order.state = 'cart'
+
     if data.destination && data.destination["PhysicalDestination"]
       current_order.email = "pending@amazon.com"
       address = data.destination["PhysicalDestination"]
@@ -57,11 +59,14 @@ class Spree::AmazonController < Spree::StoreController
       redirect_to address_amazon_order_path, :notice => "Unable to load Address data from Amazon"
     end
 
+    packages = current_order.shipments.map { |s| s.to_package }
+    @differentiator = Spree::Stock::Differentiator.new(current_order, packages)
+    render :layout => false
   end
 
   def confirm
 
-    if current_order.update_from_params(params, permitted_checkout_attributes, request.headers.env)
+    if current_order.update_attributes(object_params)
 
       @mws.set_order_data(current_order.total, current_order.currency)
 
@@ -76,7 +81,7 @@ class Spree::AmazonController < Spree::StoreController
         first_name = address["Name"].split(" ")[0] rescue "Amazon"
         last_name = address["Name"].split(" ")[1..10].join(" ")
         spree_address = current_order.ship_address
-        spree_address.update({
+        spree_address.update_attributes({
                                 "firstname" => first_name,
                                 "lastname" => last_name,
                                 "address1" => address["AddressLine1"],
@@ -95,6 +100,9 @@ class Spree::AmazonController < Spree::StoreController
       payment.amount = current_order.total
       payment.save!
       @order = current_order
+
+      # Remove the following line to enable the confirmation step.
+      redirect_to amazon_order_complete_path(@order)
     else
       render :edit
     end
@@ -102,7 +110,7 @@ class Spree::AmazonController < Spree::StoreController
   end
 
   def complete
-    @order = Spree::Order.find_by(:number => params[:amazon_order_id])
+    @order = Spree::Order.find_by_number(params[:amazon_order_id])
     authorize!(:edit, @order, cookies.signed[:guest_token])
 
     redirect_to root_path if @order.nil?
@@ -126,12 +134,48 @@ class Spree::AmazonController < Spree::StoreController
   end
 
   def load_amazon_mws
-    redirect_to root_path, :notice => "No Order Found" if current_order.amazon_order_reference_id.nil?
+    render :nothing => true, :status => 200 if current_order.amazon_order_reference_id.nil?
     @mws ||= AmazonMws.new(current_order.amazon_order_reference_id, Spree::Gateway::Amazon.first.preferred_test_mode)
   end
 
   private
 
+  def object_params
+    # has_checkout_step? check is necessary due to issue described in #2910
+    if current_order.has_checkout_step?("payment") && current_order.payment?
+      if params[:payment_source].present?
+        source_params = params.delete(:payment_source)[params[:order][:payments_attributes].first[:payment_method_id].underscore]
+
+        if source_params
+          params[:order][:payments_attributes].first[:source_attributes] = source_params
+        end
+      end
+
+      if (params[:order][:payments_attributes])
+        params[:order][:payments_attributes].first[:amount] = current_order.total
+      end
+    end
+    params[:order]
+  end
+
+
+  def has_checkout_step?(step)
+    step.present? ? self.checkout_steps.include?(step) : false
+  end
+
+  def checkout_steps
+    steps = self.class.checkout_steps.each_with_object([]) { |(step, options), checkout_steps|
+      next if options.include?(:if) && !options[:if].call(self)
+      checkout_steps << step
+    }.map(&:to_s)
+    # Ensure there is always a complete step
+    steps << "complete" unless steps.include?("complete")
+    steps
+  end
+
+  def self.checkout_steps
+    @checkout_steps ||= {}
+  end
 
   def check_for_current_order
     redirect_to root_path, :notice => "No Order Found" if current_order.nil?
