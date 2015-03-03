@@ -15,7 +15,7 @@
   src='https://static-na.payments-amazon.com/OffAmazonPayments/us/<%= Spree::Gateway::Amazon.first.preferred_test_mode ? 'sandbox/' : '' %>js/Widgets.js?sellerId=<%= Spree::Config[:amazon_merchant_id] %>'>
 </script>
 
-<div id="AmazonPayButton"/>
+<div id="AmazonPayButton"></div>
 
 <script type="text/javascript">
   var authRequest;
