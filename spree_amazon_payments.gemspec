@@ -14,7 +14,9 @@ Gem::Specification.new do |s|
   s.version     = '2.3.4'
   s.summary     = 'Spree Amazon Payments'
   s.description = ''
-  s.required_ruby_version = '>= 1.9.3'
+
+  s.required_ruby_version     = '>= 2.1.0'
+  s.required_rubygems_version = '>= 1.8.23'
 
   s.author    = 'Amazon Payments'
 
