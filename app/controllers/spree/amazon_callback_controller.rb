@@ -15,11 +15,11 @@ class Spree::AmazonCallbackController < ApplicationController
     if JSON.parse(response["Message"])["NotificationType"] == "PaymentRefund"
       refund_id = Hash.from_xml(JSON.parse(response["Message"])[ "NotificationData"])["RefundNotification"]["RefundDetails"]["AmazonRefundId"]
       payment = Spree::LogEntry.where('details LIKE ?', "%#{refund_id}%").last.try(:source)
-      return true unless payment
-      l = payment.log_entries.build(details: response.to_yaml)
-      l.save
-    else
-      render nothing: true
+      if payment
+        l = payment.log_entries.build(details: response.to_yaml)
+        l.save
+      end
     end
+    render nothing: true
   end
 end
