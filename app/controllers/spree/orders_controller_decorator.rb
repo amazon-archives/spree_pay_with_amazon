@@ -8,5 +8,5 @@
 #
 ##
 Spree::OrdersController.class_eval do
-  ssl_required :show, :edit, :update
+  force_ssl only: [:show, :edit, :update]
 end
