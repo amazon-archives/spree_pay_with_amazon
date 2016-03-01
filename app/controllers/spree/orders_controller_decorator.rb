@@ -8,5 +8,5 @@
 #
 ##
 Spree::OrdersController.class_eval do
-  force_ssl only: [:show, :edit, :update]
+  force_ssl_with_configured_port only: [:show, :edit, :update], if: :use_ssl?
 end
