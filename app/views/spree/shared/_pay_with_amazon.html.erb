@@ -1,0 +1,33 @@
+<%# %>
+<%# Amazon Payments - Login and Pay for Spree Commerce %>
+<%# %>
+<%# @category    Amazon %>
+<%# @package     Amazon_Payments %>
+<%# @copyright   Copyright (c) 2014 Amazon.com %>
+<%# @license     http://opensource.org/licenses/Apache-2.0  Apache License, Version 2.0 %>
+<%# %>
+<script type='text/javascript'>
+  window.onAmazonLoginReady = function() {
+    amazon.Login.setClientId('<%= Spree::Config[:amazon_client_id] %>');
+  };
+</script>
+<script type='text/javascript'
+  src='https://static-na.payments-amazon.com/OffAmazonPayments/us/<%= Spree::Gateway::Amazon.first.preferred_test_mode ? 'sandbox/' : '' %>js/Widgets.js?sellerId=<%= Spree::Config[:amazon_merchant_id] %>'>
+</script>
+
+<div id="AmazonPayButton"></div>
+
+<script type="text/javascript">
+  var authRequest;
+  OffAmazonPayments.Button("AmazonPayButton", "<%= Spree::Config[:amazon_merchant_id] %>", {
+    type: "PwA",
+        authorization: function() {
+      loginOptions =
+        {scope: "profile postal_code payments:widget payments:shipping_address", popup: "true"};
+      authRequest = amazon.Login.authorize (loginOptions, "/amazon_order/address");
+    },
+    onError: function(error) {
+      // your error handling code
+    }
+  });
+</script>
