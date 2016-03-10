@@ -20,8 +20,12 @@ module SSLWithConfiguredPort
 
   module ClassMethods
     def force_ssl_with_configured_port(options = {})
-      options[:port] = Rails.application.config.ssl_port if options[:port].blank? && Rails.application.config.try(:ssl_port).present?
+      options[:port] ||= Rails.application.config.ssl_port
       force_ssl options
+    end
+
+    def use_ssl?
+      Rails.application.config.try(:use_ssl)
     end
   end
 end
