@@ -8,7 +8,7 @@
 #
 ##
 class Spree::AmazonController < Spree::StoreController
-  ssl_required
+  force_ssl_with_configured_port if: :use_ssl?
   helper 'spree/orders'
   before_filter :check_for_current_order
   before_filter :load_amazon_mws, except: [:address, :payment, :complete]
