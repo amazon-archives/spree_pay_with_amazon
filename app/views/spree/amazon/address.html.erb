@@ -50,17 +50,24 @@
   </script>
 <% end %>
 
-<div id="addressBookWidgetDiv">
-</div>
+<div class="row">
 
-<div id="walletWidgetDiv">
-</div>
-
-
-  <div class="form-buttons" data-hook="buttons" id="submit_form" style="display: none;">
-    <%= link_to Spree.t(:save_and_continue), "/amazon_order/delivery", :class => 'continue button primary', :id => 'continue_to_delivery', :remote => true %>
+  <div class="col-md-6 col-xs-12">
+    <div id="addressBookWidgetDiv">
+    </div>
   </div>
 
-<div id="deliveryOptionDiv">
-  Loading...
+  <div class="col-md-6 col-xs-12">
+    <div id="walletWidgetDiv">
+    </div>
+  </div>
+
+  <div class="well text-right form-buttons" data-hook="buttons"  id="submit_form" style="display: none;">
+    <%= link_to Spree.t(:save_and_continue), "/amazon_order/delivery", :class => 'btn btn-lg btn-success', :id => 'continue_to_delivery', :remote => true %>
+  </div>
+
+  <div id="deliveryOptionDiv" class="col-md-12">
+    Loading...
+  </div>
+
 </div>

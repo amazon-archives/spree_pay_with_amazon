@@ -1,0 +1,2 @@
+<!-- insert_after 'erb[silent]:contains("@order.available_payment_methods.each")' -->
+<% next if method.type.eql?('Spree::Gateway::Amazon') %>

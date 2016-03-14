@@ -6,7 +6,6 @@
 <%# @copyright   Copyright (c) 2014 Amazon.com %>
 <%# @license     http://opensource.org/licenses/Apache-2.0  Apache License, Version 2.0 %>
 <%# %>
-<%= render :partial => 'spree/admin/shared/configuration_menu' %>
 
 <% content_for :page_title do %>
   <%= Spree.t(:amazon_settings) %>
@@ -16,32 +15,35 @@
 <%= form_tag admin_amazon_path, :method => :put do %>
   <div id="preferences" data-hook>
     <fieldset class="general no-border-top">
-      <div class="field">
+      <div class="form-group">
         <%= label_tag "Amazon Client Id" %>
-        <br />
-        <%= text_field_tag :amazon_client_id, Spree::Config[:amazon_client_id], class: 'fullwidth' %>
+        <%= text_field_tag :amazon_client_id, Spree::Config[:amazon_client_id], class: 'form-control' %>
+      </div>
 
+      <div class="form-group">
         <%= label_tag "Amazon Merchant Id" %>
-        <br />
-        <%= text_field_tag :amazon_merchant_id, Spree::Config[:amazon_merchant_id], class: 'fullwidth' %>
+        <%= text_field_tag :amazon_merchant_id, Spree::Config[:amazon_merchant_id], class: 'form-control' %>
+      </div>
 
+      <div class="form-group">
         <%= label_tag "Amazon MWS Access Key" %>
-        <br />
-        <%= text_field_tag :amazon_aws_access_key_id, Spree::Config[:amazon_aws_access_key_id], class: 'fullwidth' %>
+        <%= text_field_tag :amazon_aws_access_key_id, Spree::Config[:amazon_aws_access_key_id], class: 'form-control' %>
+      </div>
 
+      <div class="form-group">
         <%= label_tag "Amazon MWS Secret Key" %>
-        <br />
-        <%= text_field_tag :amazon_aws_secret_access_key, Spree::Config[:amazon_aws_secret_access_key], class: 'fullwidth' %>
+        <%= text_field_tag :amazon_aws_secret_access_key, Spree::Config[:amazon_aws_secret_access_key], class: 'form-control' %>
+      </div>
 
+      <div class="form-group">
         <%= label_tag "Amazon Callback Url" %>
-        <br />
-        <%= text_field_tag :amazon_callback_url, @amazon_callback_url, class: 'fullwidth', disabled: true %>
+        <%= text_field_tag :amazon_callback_url, @amazon_callback_url, class: 'form-control', disabled: true %>
+      </div>
 
-        <div class="form-buttons filter-actions actions" data-hook="buttons">
-          <%= button Spree.t('actions.update'), 'refresh' %>
-          <span class="or"><%= Spree.t(:or) %></span>
-          <%= link_to_with_icon 'remove', Spree.t('actions.cancel'), edit_admin_general_settings_url, :class => 'button' %>
-        </div>
+      <div class="form-actions" data-hook="buttons">
+        <%= button Spree.t('actions.update'), 'save' %>
+        <span class="or"><%= Spree.t(:or) %></span>
+        <%= button_link_to Spree.t('actions.cancel'), edit_admin_general_settings_url, icon: 'delete' %>
       </div>
     </fieldset>
   </div>

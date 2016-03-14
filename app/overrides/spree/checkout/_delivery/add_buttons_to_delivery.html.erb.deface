@@ -1,4 +1,4 @@
 <!-- replace '[data-hook="buttons"]' -->
-<div class="form-buttons" data-hook="buttons">
-  <%= submit_tag Spree.t(:place_order), :class => 'continue button primary' %>
+<div class="well text-right form-buttons" data-hook="buttons">
+  <%= submit_tag Spree.t(:place_order), :class => 'btn btn-lg btn-success' %>
 </div>
