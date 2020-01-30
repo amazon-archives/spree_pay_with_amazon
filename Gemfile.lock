@@ -74,8 +74,8 @@ GIT
 PATH
   remote: .
   specs:
-    spree_amazon_payments (2.3.4)
-      spree_core
+    spree_amazon_payments (3.0.0)
+      spree_core (~> 3.0.0)
 
 GEM
   remote: https://rubygems.org/
@@ -185,7 +185,7 @@ GEM
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
     ffaker (1.32.1)
-    ffi (1.9.8)
+    ffi (1.12.1)
     font-awesome-rails (4.3.0.0)
       railties (>= 3.2, < 5.0)
     friendly_id (5.1.0)
