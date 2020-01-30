@@ -74,8 +74,8 @@ GIT
 PATH
   remote: .
   specs:
-    spree_amazon_payments (2.3.4)
-      spree_core
+    spree_amazon_payments (3.0.0)
+      spree_core (~> 3.0.0)
 
 GEM
   remote: https://rubygems.org/
@@ -243,7 +243,7 @@ GEM
       premailer (~> 1.7, >= 1.7.9)
     rabl (0.9.4.pre1)
       activesupport (>= 2.3.14)
-    rack (1.6.1)
+    rack (1.6.12)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.2.1)
