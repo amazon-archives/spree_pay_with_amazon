@@ -74,8 +74,8 @@ GIT
 PATH
   remote: .
   specs:
-    spree_amazon_payments (2.3.4)
-      spree_core
+    spree_amazon_payments (3.0.0)
+      spree_core (~> 3.0.0)
 
 GEM
   remote: https://rubygems.org/
@@ -220,7 +220,7 @@ GEM
       money (~> 6.5.0)
     money (6.5.1)
       i18n (>= 0.6.4, <= 0.7.0)
-    multi_json (1.11.0)
+    multi_json (1.14.1)
     multi_xml (0.5.5)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
@@ -243,7 +243,7 @@ GEM
       premailer (~> 1.7, >= 1.7.9)
     rabl (0.9.4.pre1)
       activesupport (>= 2.3.14)
-    rack (1.6.1)
+    rack (1.6.12)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.2.1)
@@ -315,7 +315,7 @@ GEM
       json (~> 1.8)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.0)
-    sprockets (2.12.3)
+    sprockets (2.12.5)
       hike (~> 1.2)
       multi_json (~> 1.0)
       rack (~> 1.0)
