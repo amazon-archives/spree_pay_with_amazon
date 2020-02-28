@@ -74,8 +74,8 @@ GIT
 PATH
   remote: .
   specs:
-    spree_amazon_payments (2.3.4)
-      spree_core
+    spree_amazon_payments (3.0.0)
+      spree_core (~> 3.0.0)
 
 GEM
   remote: https://rubygems.org/
@@ -270,7 +270,7 @@ GEM
       activesupport (= 4.2.1)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    rake (10.4.2)
+    rake (12.3.3)
     ransack (1.4.1)
       actionpack (>= 3.0)
       activerecord (>= 3.0)
